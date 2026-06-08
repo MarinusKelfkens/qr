@@ -19,7 +19,7 @@
       }
 
       main {
-        max-width: 720px;
+        max-width: 960px;
         margin: 0 auto;
         background: white;
         border-radius: 1rem;
@@ -111,7 +111,7 @@
       <p class="total">{{ total }}</p>
       <p class="label">total visits to /secret</p>
 
-      <h2>By device</h2>
+      <h2>By type</h2>
       {% if by_device %}
       <div class="devices">
         {% for row in by_device %}
@@ -125,13 +125,30 @@
       <p class="empty">No visits yet.</p>
       {% endif %}
 
+      <h2>By browser</h2>
+      {% if by_browser %}
+      <div class="devices">
+        {% for row in by_browser %}
+        <div class="device-row">
+          <span>{{ row["browser"] }}</span>
+          <strong>{{ row["count"] }}</strong>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty">No visits yet.</p>
+      {% endif %}
+
       <h2>Recent visits</h2>
       {% if recent %}
+      <div style="overflow-x: auto">
       <table>
         <thead>
           <tr>
             <th>Time (UTC)</th>
-            <th>Device</th>
+            <th>Type</th>
+            <th>OS</th>
+            <th>Browser</th>
             <th>IP</th>
           </tr>
         </thead>
@@ -139,12 +156,15 @@
           {% for row in recent %}
           <tr>
             <td>{{ row["visited_at"] }}</td>
-            <td>{{ row["device"] }}</td>
+            <td>{{ row["device_type"] or "—" }}</td>
+            <td>{{ row["os"] or "—" }}</td>
+            <td>{{ row["browser"] or "—" }}</td>
             <td>{{ row["ip_address"] or "—" }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      </div>
       {% else %}
       <p class="empty">No visits yet.</p>
       {% endif %}
