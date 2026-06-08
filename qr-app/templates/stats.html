@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visit stats</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f4f4f5;
+        color: #18181b;
+        padding: 2rem 1rem;
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+      }
+
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.5rem;
+      }
+
+      .back {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: #52525b;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .back:hover {
+        color: #18181b;
+      }
+
+      .total {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+      }
+
+      .label {
+        color: #52525b;
+        margin: 0 0 2rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #71717a;
+      }
+
+      .devices {
+        display: grid;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .device-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6rem 0.75rem;
+        background: #f4f4f5;
+        border-radius: 0.5rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid #e4e4e7;
+      }
+
+      th {
+        color: #71717a;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .empty {
+        color: #71717a;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="{{ url_for('index') }}">&larr; Back to QR code</a>
+      <h1>Visit stats</h1>
+      <p class="total">{{ total }}</p>
+      <p class="label">total visits to /secret</p>
+
+      <h2>By device</h2>
+      {% if by_device %}
+      <div class="devices">
+        {% for row in by_device %}
+        <div class="device-row">
+          <span>{{ row["device"] }}</span>
+          <strong>{{ row["count"] }}</strong>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty">No visits yet.</p>
+      {% endif %}
+
+      <h2>Recent visits</h2>
+      {% if recent %}
+      <table>
+        <thead>
+          <tr>
+            <th>Time (UTC)</th>
+            <th>Device</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in recent %}
+          <tr>
+            <td>{{ row["visited_at"] }}</td>
+            <td>{{ row["device"] }}</td>
+            <td>{{ row["ip_address"] or "—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="empty">No visits yet.</p>
+      {% endif %}
+    </main>
+  </body>
+</html>
